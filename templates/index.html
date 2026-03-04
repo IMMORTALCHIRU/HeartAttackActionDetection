@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+
+{% block title %}HeartGuardAI - Smart Heart Attack Surveillance System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-bg-animation">
+        <div class="pulse-circle"></div>
+        <div class="pulse-circle delay-1"></div>
+        <div class="pulse-circle delay-2"></div>
+    </div>
+    
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="hero-badge">
+                    <i class="bi bi-shield-check"></i>
+                    <span>AI-Powered Health Monitoring</span>
+                </div>
+                <h1 class="hero-title">
+                    Smart <span class="text-gradient">Heart Attack</span> & Fall Detection System
+                </h1>
+                <p class="hero-subtitle">
+                    Advanced artificial intelligence that monitors, detects, and alerts in real-time. 
+                    Protecting lives through innovative technology and instant emergency response.
+                </p>
+                <div class="hero-buttons">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('detection') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-play-circle me-2"></i> Start Detection
+                        </a>
+                        <a href="{{ url_for('history') }}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-clock-history me-2"></i> View History
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-plus me-2"></i> Get Started Free
+                        </a>
+                        <a href="#how-it-works" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-info-circle me-2"></i> Learn More
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">99.2%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">&lt;3s</span>
+                        <span class="stat-label">Detection Time</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Monitoring</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="hero-image-container">
+                    <div class="hero-image-wrapper">
+                        <img src="https://img.icons8.com/3d-fluency/500/heart-with-pulse.png" alt="Heart Monitoring" class="hero-main-image">
+                        <div class="floating-card card-1">
+                            <i class="bi bi-heart-pulse-fill text-danger"></i>
+                            <span>Heart Attack Detected</span>
+                        </div>
+                        <div class="floating-card card-2">
+                            <i class="bi bi-person-falling text-warning"></i>
+                            <span>Fall Detection Active</span>
+                        </div>
+                        <div class="floating-card card-3">
+                            <i class="bi bi-bell-fill text-success"></i>
+                            <span>Alert Sent!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hero-wave">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+        </svg>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <span class="section-badge">Features</span>
+            <h2 class="section-title">Advanced Detection <span class="text-gradient">Capabilities</span></h2>
+            <p class="section-subtitle">Our AI-powered system provides comprehensive health monitoring with multiple detection methods</p>
+        </div>
+        
+        <div class="row g-4 mt-4">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <img src="https://img.icons8.com/3d-fluency/94/camera.png" alt="Camera">
+                    </div>
+                    <h4>Image Detection</h4>
+                    <p>Upload images for instant analysis. Our AI detects heart attack poses and signs within seconds.</p>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Instant analysis</li>
+                        <li><i class="bi bi-check-circle-fill"></i> High accuracy</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Multiple format support</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card featured">
+                    <div class="featured-badge">Popular</div>
+                    <div class="feature-icon-wrapper">
+                        <img src="https://img.icons8.com/3d-fluency/94/video.png" alt="Video">
+                    </div>
+                    <h4>Video Analysis</h4>
+                    <p>Analyze recorded videos for comprehensive monitoring. Perfect for reviewing security footage.</p>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Full video processing</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Timeline markers</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Export results</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <img src="https://img.icons8.com/3d-fluency/94/webcam.png" alt="Webcam">
+                    </div>
+                    <h4>Live Monitoring</h4>
+                    <p>Real-time detection through webcam. Continuous monitoring with instant alerts.</p>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Real-time processing</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Instant alerts</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Auto screenshot</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <img src="https://img.icons8.com/3d-fluency/94/heart-with-pulse.png" alt="Heart">
+                    </div>
+                    <h4>Heart Attack Detection</h4>
+                    <p>Detects characteristic poses like clutching chest, bent arms, and hunched posture.</p>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Pose analysis</li>
+                        <li><i class="bi bi-check-circle-fill"></i> 3-second confirmation</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Confidence scoring</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <img src="https://img.icons8.com/3d-fluency/94/falling-man.png" alt="Fall">
+                    </div>
+                    <h4>Fall Detection</h4>
+                    <p>Monitors for sudden falls, body collapse, and unusual positions indicating emergencies.</p>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Velocity tracking</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Position analysis</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Multi-indicator check</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <img src="https://img.icons8.com/3d-fluency/94/email.png" alt="Email">
+                    </div>
+                    <h4>Email Alerts</h4>
+                    <p>Automatic email notifications with screenshots sent to emergency contacts instantly.</p>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-check-circle-fill"></i> Instant notifications</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Screenshot attachment</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Detailed reports</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section" id="how-it-works">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <span class="section-badge">Process</span>
+            <h2 class="section-title">How It <span class="text-gradient">Works</span></h2>
+            <p class="section-subtitle">Simple, fast, and effective health monitoring in just a few steps</p>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-item" data-aos="fade-right">
+                <div class="timeline-number">01</div>
+                <div class="timeline-content">
+                    <div class="timeline-icon">
+                        <img src="https://img.icons8.com/3d-fluency/94/add-user-male.png" alt="Register">
+                    </div>
+                    <h4>Register & Setup</h4>
+                    <p>Create your account and add emergency contact details for instant alerts.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item" data-aos="fade-left">
+                <div class="timeline-number">02</div>
+                <div class="timeline-content">
+                    <div class="timeline-icon">
+                        <img src="https://img.icons8.com/3d-fluency/94/upload.png" alt="Upload">
+                    </div>
+                    <h4>Upload or Stream</h4>
+                    <p>Upload images, videos, or start live webcam monitoring for real-time detection.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item" data-aos="fade-right">
+                <div class="timeline-number">03</div>
+                <div class="timeline-content">
+                    <div class="timeline-icon">
+                        <img src="https://img.icons8.com/3d-fluency/94/artificial-intelligence.png" alt="AI">
+                    </div>
+                    <h4>AI Analysis</h4>
+                    <p>Our advanced AI analyzes poses, movements, and patterns to detect emergencies.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item" data-aos="fade-left">
+                <div class="timeline-number">04</div>
+                <div class="timeline-content">
+                    <div class="timeline-icon">
+                        <img src="https://img.icons8.com/3d-fluency/94/alarm.png" alt="Alert">
+                    </div>
+                    <h4>Instant Alert</h4>
+                    <p>Receive immediate alerts and automatic email notifications with screenshots.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <img src="https://img.icons8.com/3d-fluency/94/artificial-intelligence.png" alt="AI">
+                    </div>
+                    <div class="stat-value" data-count="99.2">0</div>
+                    <div class="stat-label">Detection Accuracy %</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <img src="https://img.icons8.com/3d-fluency/94/time.png" alt="Time">
+                    </div>
+                    <div class="stat-value">&lt;3</div>
+                    <div class="stat-label">Seconds Response</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <img src="https://img.icons8.com/3d-fluency/94/checked-user-male.png" alt="Users">
+                    </div>
+                    <div class="stat-value" data-count="10000">0</div>
+                    <div class="stat-label">Users Protected</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <img src="https://img.icons8.com/3d-fluency/94/24-hours-day-support.png" alt="24/7">
+                    </div>
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Monitoring Available</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section" id="about">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="about-image-wrapper">
+                    <img src="https://img.icons8.com/3d-fluency/500/stethoscope.png" alt="Healthcare" class="about-main-image">
+                    <div class="about-badge">
+                        <img src="https://img.icons8.com/3d-fluency/94/verified-badge.png" alt="Verified">
+                        <span>Trusted Healthcare Solution</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <span class="section-badge">About Us</span>
+                <h2 class="section-title">Revolutionizing <span class="text-gradient">Healthcare</span> Monitoring</h2>
+                <p class="about-text">
+                    HeartGuardAI is an advanced artificial intelligence system designed to detect early signs of 
+                    heart attacks and falls through video surveillance. Our mission is to save lives by providing 
+                    instant detection and alerts, ensuring help arrives when it matters most.
+                </p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </div>
+                        <div>
+                            <h5>Advanced AI Technology</h5>
+                            <p>Powered by state-of-the-art YOLO pose estimation and custom algorithms</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div>
+                            <h5>Privacy First</h5>
+                            <p>All processing is done securely with your privacy in mind</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <i class="bi bi-lightning-charge-fill"></i>
+                        </div>
+                        <div>
+                            <h5>Instant Response</h5>
+                            <p>Real-time processing with immediate alerts to emergency contacts</p>
+                        </div>
+                    </div>
+                </div>
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mt-4">
+                    <i class="bi bi-rocket-takeoff me-2"></i> Start Protecting Lives Today
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not current_user.is_authenticated %}
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content" data-aos="zoom-in">
+            <div class="cta-icon">
+                <img src="https://img.icons8.com/3d-fluency/94/heart-with-pulse.png" alt="Heart">
+            </div>
+            <h2>Ready to Protect Your Loved Ones?</h2>
+            <p>Join thousands of users who trust HeartGuardAI for their health monitoring needs.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">
+                    <i class="bi bi-person-plus me-2"></i> Create Free Account
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Counter animation
+    const counters = document.querySelectorAll('.stat-value[data-count]');
+    
+    const animateCounter = (counter) => {
+        const target = parseFloat(counter.getAttribute('data-count'));
+        const duration = 2000;
+        const start = 0;
+        const startTime = performance.now();
+        
+        const updateCounter = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const current = start + (target - start) * progress;
+            
+            if (target % 1 === 0) {
+                counter.textContent = Math.floor(current).toLocaleString();
+            } else {
+                counter.textContent = current.toFixed(1);
+            }
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            }
+        };
+        
+        requestAnimationFrame(updateCounter);
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    counters.forEach(counter => observer.observe(counter));
+</script>
+{% endblock %}

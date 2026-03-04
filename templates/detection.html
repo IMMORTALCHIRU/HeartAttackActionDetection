@@ -1,0 +1,556 @@
+{% extends 'base.html' %}
+
+{% block title %}Detection - HeartGuardAI{% endblock %}
+
+{% block content %}
+<section class="detection-section">
+    <div class="container py-5">
+        <div class="section-header text-center mb-5" data-aos="fade-up">
+            <span class="section-badge">Detection Center</span>
+            <h2 class="section-title">Start <span class="text-gradient">Monitoring</span></h2>
+            <p class="section-subtitle">Choose your preferred detection method below</p>
+        </div>
+        
+        <!-- Detection Mode Tabs -->
+        <ul class="nav nav-pills detection-tabs justify-content-center mb-5" data-aos="fade-up">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#image-tab">
+                    <i class="bi bi-image" style="color: black;"></i>
+                    <span style="color: black;">Image</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link " data-bs-toggle="pill" data-bs-target="#video-tab">
+                    <i class="bi bi-film" style="color: black;"></i>
+                    <span style="color: black;">Video</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#live-tab">
+                    <i class="bi bi-webcam" style="color: black;"></i>
+                    <span style="color: black;">Live</span>
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Image Detection Tab -->
+            <div class="tab-pane fade show active" id="image-tab">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="detection-card" data-aos="fade-up">
+                            <div class="detection-card-header">
+                                <img src="https://img.icons8.com/3d-fluency/94/camera.png" alt="Image">
+                                <h4>Image Detection</h4>
+                                <p>Upload an image to analyze for heart attack signs</p>
+                            </div>
+                            
+                            <div class="upload-area" id="imageUploadArea">
+                                <input type="file" id="imageInput" accept="image/*" hidden>
+                                <div class="upload-content">
+                                    <img src="https://img.icons8.com/3d-fluency/94/upload-to-cloud.png" alt="Upload">
+                                    <h5>Drop your image here</h5>
+                                    <p>or click to browse</p>
+                                    <span class="upload-formats">Supports: JPG, PNG, WEBP, BMP</span>
+                                </div>
+                                <div class="upload-preview" id="imagePreview" style="display: none;">
+                                    <img src="" alt="Preview" id="imagePreviewImg">
+                                    <button class="btn btn-sm btn-danger remove-preview" onclick="removeImagePreview()">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-lg w-100 mt-4" id="analyzeImageBtn" disabled>
+                                <i class="bi bi-search-heart me-2"></i>Analyze Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Detection Tab -->
+            <div class="tab-pane fade" id="video-tab">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="detection-card" data-aos="fade-up">
+                            <div class="detection-card-header">
+                                <img src="https://img.icons8.com/3d-fluency/94/video.png" alt="Video">
+                                <h4>Video Analysis</h4>
+                                <p>Upload a video for comprehensive analysis</p>
+                            </div>
+                            
+                            <div class="upload-area" id="videoUploadArea">
+                                <input type="file" id="videoInput" accept="video/*" hidden>
+                                <div class="upload-content">
+                                    <img src="https://img.icons8.com/3d-fluency/94/upload-to-cloud.png" alt="Upload">
+                                    <h5>Drop your video here</h5>
+                                    <p>or click to browse</p>
+                                    <span class="upload-formats">Supports: MP4, AVI, MOV, MKV, WEBM</span>
+                                </div>
+                                <div class="upload-preview video-preview" id="videoPreview" style="display: none;">
+                                    <video src="" id="videoPreviewVid" controls></video>
+                                    <button class="btn btn-sm btn-danger remove-preview" onclick="removeVideoPreview()">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-lg w-100 mt-4" id="analyzeVideoBtn" disabled>
+                                <i class="bi bi-search-heart me-2"></i>Analyze Video
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Live Detection Tab -->
+            <div class="tab-pane fade" id="live-tab">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="detection-card live-card" data-aos="fade-up">
+                            <div class="detection-card-header">
+                                <img src="https://img.icons8.com/3d-fluency/94/webcam.png" alt="Webcam">
+                                <h4>Live Monitoring</h4>
+                                <p>Real-time detection through your webcam</p>
+                            </div>
+                            
+                            <div class="live-feed-container">
+                                <div class="live-feed-placeholder" id="liveFeedPlaceholder">
+                                    <img src="https://img.icons8.com/3d-fluency/94/no-video.png" alt="No Feed">
+                                    <p>Click "Start Monitoring" to begin</p>
+                                </div>
+                                <img src="" alt="Live Feed" id="liveFeed" style="display: none;">
+                                
+                                <div class="live-status-overlay" id="liveStatusOverlay" style="display: none;">
+                                    <div class="status-indicator"></div>
+                                    <span>LIVE</span>
+                                </div>
+                                
+                                <div class="live-detection-alert" id="liveDetectionAlert" style="display: none;">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    <span id="liveAlertText">Detection Alert</span>
+                                </div>
+                            </div>
+                            
+                            <div class="live-controls">
+                                <button class="btn btn-success btn-lg" id="startLiveBtn">
+                                    <i class="bi bi-play-circle me-2"></i>Start Monitoring
+                                </button>
+                                <button class="btn btn-danger btn-lg" id="stopLiveBtn" style="display: none;">
+                                    <i class="bi bi-stop-circle me-2"></i>Stop Monitoring
+                                </button>
+                            </div>
+                            
+                            <div class="live-info mt-4">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="info-card">
+                                            <i class="bi bi-heart-pulse text-danger"></i>
+                                            <span class="info-label">Heart Attack</span>
+                                            <span class="info-value" id="heartAttackStatus">Not Detected</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="info-card">
+                                            <i class="bi bi-person-falling text-warning"></i>
+                                            <span class="info-label">Fall</span>
+                                            <span class="info-value" id="fallStatus">Not Detected</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="info-card">
+                                            <i class="bi bi-graph-up text-success"></i>
+                                            <span class="info-label">Confidence</span>
+                                            <span class="info-value" id="confidenceValue">0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-section mt-5" id="resultsSection" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="results-card" data-aos="fade-up">
+                        <div class="results-header">
+                            <h4><i class="bi bi-clipboard2-pulse me-2"></i>Detection Results</h4>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="closeResults()">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="result-image-container">
+                                    <img src="" alt="Result" id="resultImage">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="result-details">
+                                    <div class="result-status" id="resultStatus">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <span>Normal</span>
+                                    </div>
+                                    
+                                    <div class="result-metrics">
+                                        <div class="metric">
+                                            <span class="metric-label">Detection Type</span>
+                                            <span class="metric-value" id="resultType">-</span>
+                                        </div>
+                                        <div class="metric">
+                                            <span class="metric-label">Confidence</span>
+                                            <span class="metric-value" id="resultConfidence">0%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="result-signs" id="resultSigns">
+                                        <h6><i class="bi bi-list-check me-2"></i>Detected Signs</h6>
+                                        <ul id="signsList"></ul>
+                                    </div>
+                                    
+                                    <div class="result-actions">
+                                        <a href="" class="btn btn-primary" id="downloadResultBtn" download>
+                                            <i class="bi bi-download me-2"></i>Download Result
+                                        </a>
+                                        <a href="{{ url_for('history') }}" class="btn btn-outline-primary">
+                                            <i class="bi bi-clock-history me-2"></i>View History
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Loading Modal -->
+<div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content loading-modal-content">
+            <div class="modal-body text-center py-5">
+                <div class="loading-animation">
+                    <div class="heart-beat">
+                        <img src="https://img.icons8.com/3d-fluency/94/heart-with-pulse.png" alt="Loading">
+                    </div>
+                </div>
+                <h4 class="mt-4">Analyzing...</h4>
+                <p class="text-muted" id="loadingText">Processing your file with AI</p>
+                <div class="progress mt-3">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// File upload handling
+const imageUploadArea = document.getElementById('imageUploadArea');
+const imageInput = document.getElementById('imageInput');
+const imagePreview = document.getElementById('imagePreview');
+const imagePreviewImg = document.getElementById('imagePreviewImg');
+const analyzeImageBtn = document.getElementById('analyzeImageBtn');
+
+const videoUploadArea = document.getElementById('videoUploadArea');
+const videoInput = document.getElementById('videoInput');
+const videoPreview = document.getElementById('videoPreview');
+const videoPreviewVid = document.getElementById('videoPreviewVid');
+const analyzeVideoBtn = document.getElementById('analyzeVideoBtn');
+
+let selectedImageFile = null;
+let selectedVideoFile = null;
+
+// Image upload
+imageUploadArea.addEventListener('click', () => imageInput.click());
+imageUploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    imageUploadArea.classList.add('dragover');
+});
+imageUploadArea.addEventListener('dragleave', () => imageUploadArea.classList.remove('dragover'));
+imageUploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    imageUploadArea.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        handleImageFile(file);
+    }
+});
+imageInput.addEventListener('change', (e) => {
+    if (e.target.files[0]) handleImageFile(e.target.files[0]);
+});
+
+function handleImageFile(file) {
+    selectedImageFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        imagePreviewImg.src = e.target.result;
+        imagePreview.style.display = 'block';
+        imageUploadArea.querySelector('.upload-content').style.display = 'none';
+        analyzeImageBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImagePreview() {
+    selectedImageFile = null;
+    imagePreview.style.display = 'none';
+    imageUploadArea.querySelector('.upload-content').style.display = 'flex';
+    analyzeImageBtn.disabled = true;
+    imageInput.value = '';
+}
+
+// Video upload
+videoUploadArea.addEventListener('click', () => videoInput.click());
+videoUploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    videoUploadArea.classList.add('dragover');
+});
+videoUploadArea.addEventListener('dragleave', () => videoUploadArea.classList.remove('dragover'));
+videoUploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    videoUploadArea.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('video/')) {
+        handleVideoFile(file);
+    }
+});
+videoInput.addEventListener('change', (e) => {
+    if (e.target.files[0]) handleVideoFile(e.target.files[0]);
+});
+
+function handleVideoFile(file) {
+    selectedVideoFile = file;
+    const url = URL.createObjectURL(file);
+    videoPreviewVid.src = url;
+    videoPreview.style.display = 'block';
+    videoUploadArea.querySelector('.upload-content').style.display = 'none';
+    analyzeVideoBtn.disabled = false;
+}
+
+function removeVideoPreview() {
+    selectedVideoFile = null;
+    videoPreview.style.display = 'none';
+    videoUploadArea.querySelector('.upload-content').style.display = 'flex';
+    analyzeVideoBtn.disabled = true;
+    videoInput.value = '';
+}
+
+// Analyze Image
+analyzeImageBtn.addEventListener('click', async () => {
+    if (!selectedImageFile) return;
+    
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+    document.getElementById('loadingText').textContent = 'Analyzing image for heart attack signs...';
+    loadingModal.show();
+    
+    const formData = new FormData();
+    formData.append('file', selectedImageFile);
+    
+    try {
+        const response = await fetch('/api/detect/image', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        loadingModal.hide();
+        
+        if (data.success) {
+            showResults(data);
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        loadingModal.hide();
+        alert('Error processing image: ' + error.message);
+    }
+});
+
+// Analyze Video
+analyzeVideoBtn.addEventListener('click', async () => {
+    if (!selectedVideoFile) return;
+    
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+    document.getElementById('loadingText').textContent = 'Processing video... This may take a while.';
+    loadingModal.show();
+    
+    const formData = new FormData();
+    formData.append('file', selectedVideoFile);
+    
+    try {
+        const response = await fetch('/api/detect/video', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        loadingModal.hide();
+        
+        if (data.success) {
+            showResults(data);
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        loadingModal.hide();
+        alert('Error processing video: ' + error.message);
+    }
+});
+
+// Show Results
+function showResults(data) {
+    const resultsSection = document.getElementById('resultsSection');
+    const resultImage = document.getElementById('resultImage');
+    const resultStatus = document.getElementById('resultStatus');
+    const resultType = document.getElementById('resultType');
+    const resultConfidence = document.getElementById('resultConfidence');
+    const signsList = document.getElementById('signsList');
+    const downloadBtn = document.getElementById('downloadResultBtn');
+    
+    // Set result image
+    if (data.output_path) {
+        resultImage.src = '/static/' + data.output_path;
+        downloadBtn.href = '/static/' + data.output_path;
+    }
+    
+    // Set status
+    const statusConfig = {
+        'normal': { icon: 'bi-check-circle-fill', class: 'status-normal', text: 'Normal' },
+        'heart_attack': { icon: 'bi-exclamation-triangle-fill', class: 'status-danger', text: 'Heart Attack Detected' },
+        'fall': { icon: 'bi-exclamation-circle-fill', class: 'status-warning', text: 'Fall Detected' },
+        'emergency': { icon: 'bi-exclamation-octagon-fill', class: 'status-emergency', text: 'EMERGENCY' }
+    };
+    
+    const status = statusConfig[data.detection_type] || statusConfig['normal'];
+    resultStatus.className = 'result-status ' + status.class;
+    resultStatus.innerHTML = `<i class="bi ${status.icon}"></i><span>${status.text}</span>`;
+    
+    resultType.textContent = data.detection_type.replace('_', ' ').toUpperCase();
+    resultConfidence.textContent = (data.confidence * 100).toFixed(1) + '%';
+    
+    // Set signs
+    signsList.innerHTML = '';
+    if (data.signs && data.signs.length > 0) {
+        data.signs.forEach(sign => {
+            const li = document.createElement('li');
+            li.innerHTML = `<i class="bi bi-check2"></i> ${sign}`;
+            signsList.appendChild(li);
+        });
+    } else {
+        signsList.innerHTML = '<li><i class="bi bi-dash"></i> No specific signs detected</li>';
+    }
+    
+    resultsSection.style.display = 'block';
+    resultsSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function closeResults() {
+    document.getElementById('resultsSection').style.display = 'none';
+}
+
+// Live Detection
+const startLiveBtn = document.getElementById('startLiveBtn');
+const stopLiveBtn = document.getElementById('stopLiveBtn');
+const liveFeed = document.getElementById('liveFeed');
+const liveFeedPlaceholder = document.getElementById('liveFeedPlaceholder');
+const liveStatusOverlay = document.getElementById('liveStatusOverlay');
+const liveDetectionAlert = document.getElementById('liveDetectionAlert');
+let liveStatusInterval = null;
+
+startLiveBtn.addEventListener('click', async () => {
+    try {
+        const response = await fetch('/api/detect/live/start', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+            liveFeed.src = '/api/detect/live/feed';
+            liveFeed.style.display = 'block';
+            liveFeedPlaceholder.style.display = 'none';
+            liveStatusOverlay.style.display = 'flex';
+            startLiveBtn.style.display = 'none';
+            stopLiveBtn.style.display = 'inline-flex';
+            
+            // Start status polling
+            liveStatusInterval = setInterval(checkLiveStatus, 1000);
+        }
+    } catch (error) {
+        alert('Error starting live detection: ' + error.message);
+    }
+});
+
+stopLiveBtn.addEventListener('click', async () => {
+    try {
+        const response = await fetch('/api/detect/live/stop', { method: 'POST' });
+        const data = await response.json();
+        
+        liveFeed.src = '';
+        liveFeed.style.display = 'none';
+        liveFeedPlaceholder.style.display = 'flex';
+        liveStatusOverlay.style.display = 'none';
+        liveDetectionAlert.style.display = 'none';
+        startLiveBtn.style.display = 'inline-flex';
+        stopLiveBtn.style.display = 'none';
+        
+        if (liveStatusInterval) {
+            clearInterval(liveStatusInterval);
+            liveStatusInterval = null;
+        }
+        
+        // Reset status displays
+        document.getElementById('heartAttackStatus').textContent = 'Not Detected';
+        document.getElementById('fallStatus').textContent = 'Not Detected';
+        document.getElementById('confidenceValue').textContent = '0%';
+    } catch (error) {
+        alert('Error stopping live detection: ' + error.message);
+    }
+});
+
+async function checkLiveStatus() {
+    try {
+        const response = await fetch('/api/detect/live/status');
+        const data = await response.json();
+        
+        document.getElementById('heartAttackStatus').textContent = 
+            data.heart_attack_detected ? 'DETECTED!' : 
+            data.heart_attack_detecting ? 'Detecting...' : 'Not Detected';
+        
+        document.getElementById('fallStatus').textContent = 
+            data.fall_detected ? 'DETECTED!' : 'Not Detected';
+        
+        document.getElementById('confidenceValue').textContent = 
+            (data.confidence * 100).toFixed(1) + '%';
+        
+        // Show alert overlay
+        if (data.heart_attack_detected || data.fall_detected || data.emergency) {
+            liveDetectionAlert.style.display = 'flex';
+            if (data.emergency) {
+                document.getElementById('liveAlertText').textContent = 'EMERGENCY DETECTED!';
+                liveDetectionAlert.className = 'live-detection-alert alert-emergency';
+            } else if (data.heart_attack_detected) {
+                document.getElementById('liveAlertText').textContent = 'Heart Attack Detected!';
+                liveDetectionAlert.className = 'live-detection-alert alert-danger';
+            } else {
+                document.getElementById('liveAlertText').textContent = 'Fall Detected!';
+                liveDetectionAlert.className = 'live-detection-alert alert-warning';
+            }
+        } else {
+            liveDetectionAlert.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error checking live status:', error);
+    }
+}
+</script>
+{% endblock %}

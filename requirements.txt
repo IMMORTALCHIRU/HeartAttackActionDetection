@@ -1,0 +1,14 @@
+Flask
+Flask-PyMongo
+Flask-Login
+Flask-WTF
+Flask-Mail
+pymongo
+bcrypt
+python-dotenv
+opencv-python
+numpy
+ultralytics
+Werkzeug
+email-validator
+dnspython
